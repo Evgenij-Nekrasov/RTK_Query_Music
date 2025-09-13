@@ -1,8 +1,10 @@
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+
 import { useInfiniteScroll } from '@/common/hooks';
 import { useFetchTracksInfiniteQuery } from '@/features/tracks/api/tracksApi';
 
 export const TracksPage = () => {
-  const { data, hasNextPage, isFetching, fetchNextPage } =
+  const { data, hasNextPage, isFetching, fetchNextPage, isLoading } =
     useFetchTracksInfiniteQuery();
   const { observerRef } = useInfiniteScroll({
     hasNextPage,
@@ -11,6 +13,16 @@ export const TracksPage = () => {
   });
 
   const pages = data?.pages.flatMap((page) => page.data);
+
+  if (isLoading) {
+    return (
+      <SkeletonTheme baseColor="#202020" highlightColor="#444">
+        <p>
+          <Skeleton count={3} height="100px" width="100%" />
+        </p>
+      </SkeletonTheme>
+    );
+  }
 
   return (
     <>

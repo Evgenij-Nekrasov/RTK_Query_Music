@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import { useFetchPlaylistsQuery } from '@/features/playlists/api/playlistsApi';
 import type {
@@ -39,6 +41,16 @@ export const PlaylistsPage = () => {
       setPlaylistId(null);
     }
   };
+
+  if (isLoading) {
+    return (
+      <SkeletonTheme baseColor="#202020" highlightColor="#444">
+        <p>
+          <Skeleton count={3} height="100px" width="100%" />
+        </p>
+      </SkeletonTheme>
+    );
+  }
 
   return (
     <div className={s.container}>

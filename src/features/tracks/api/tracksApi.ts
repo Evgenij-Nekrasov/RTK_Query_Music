@@ -16,7 +16,7 @@ export const tracksApi = baseApi.injectEndpoints({
       },
       query: ({ pageParam }) => ({
         url: 'playlists/tracks',
-        params: { cursor: pageParam, paginationType: 'cursor', pageSize: 5 },
+        params: { cursor: pageParam, paginationType: 'cursor', pageSize: 7 },
       }),
       providesTags: ['Tracks'],
     }),
