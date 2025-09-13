@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const baseApi = createApi({
-  reducerPath: 'playlistsApi',
-  tagTypes: ['Playlist'],
+  reducerPath: 'api',
+  keepUnusedDataFor: 86400,
+  tagTypes: ['Playlist', 'Tracks'],
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BASE_URL,
     headers: {

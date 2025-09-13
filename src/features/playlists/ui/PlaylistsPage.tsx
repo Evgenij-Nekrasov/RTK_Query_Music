@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-  useDeletePlaylistsMutation,
-  useFetchPlaylistsQuery,
-} from '@/features/playlists/api/playlistsApi';
+import { useFetchPlaylistsQuery } from '@/features/playlists/api/playlistsApi';
 import type {
   PlaylistData,
   UpdatePlaylistArgs,
@@ -13,9 +10,9 @@ import { CreatePlaylistForm } from '@/features/playlists/ui/CreatePlaylistForm/C
 import { EditPlaylistForm } from '@/features/playlists/ui/EditPlaylistForm/EditPlaylistForm';
 import { PlaylistItem } from '@/features/playlists/ui/PlaylistItem/PlaylistItem';
 import { useDebounceValue } from '@/common/hooks';
+import { Pagination } from '@/common/components';
 
 import s from './PlaylistsPage.module.css';
-import { Pagination } from '@/common/components';
 
 export const PlaylistsPage = () => {
   const [playlistId, setPlaylistId] = useState<string | null>(null);
@@ -29,13 +26,6 @@ export const PlaylistsPage = () => {
     search: debouncedSearch,
     pageNumber: currentPage,
   });
-  const [deletePlaylist] = useDeletePlaylistsMutation();
-
-  const handleDeletePlaylist = (playlistId: string) => {
-    if (confirm('Are you sure to delete playlist?')) {
-      deletePlaylist(playlistId);
-    }
-  };
 
   const handleEditPlaylist = (playlist: PlaylistData | null) => {
     if (playlist) {
@@ -77,7 +67,6 @@ export const PlaylistsPage = () => {
               ) : (
                 <PlaylistItem
                   playlist={playlist}
-                  handleDeletePlaylist={handleDeletePlaylist}
                   handleEditPlaylist={handleEditPlaylist}
                 />
               )}
