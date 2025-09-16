@@ -63,7 +63,6 @@ export const PlaylistsPage = () => {
         onChange={(e) => setSearchPlaylist(e.currentTarget.value)}
       />
       <div className={s.items}>
-        {!data?.data.length && !isLoading && <h2>Playlist not found</h2>}
         {data?.data.map((playlist) => {
           const isEditing = playlist.id === playlistId;
           return (
