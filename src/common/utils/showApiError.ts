@@ -13,13 +13,8 @@ export function showApiError(error: FetchBaseQueryError) {
     case 400: {
       const msg = (error.data as { errors: { detail: string }[] }).errors[0]
         .detail;
+      if (msg.includes('refresh')) return;
       toast(`${msg.slice(0, 100)}...`, { type: 'error', theme: 'colored' });
-      break;
-    }
-
-    case 401: {
-      const msg = (error.data as { message: string }).message;
-      toast(msg, { type: 'error', theme: 'colored' });
       break;
     }
 
