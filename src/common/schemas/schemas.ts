@@ -1,11 +1,6 @@
 import { CurrentUserReaction } from '@/common/enums';
 import * as z from 'zod';
 
-export const tagSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-});
-
 export const userSchema = z.object({
   id: z.string(),
   name: z.string(),

@@ -1,7 +1,10 @@
+import { io } from 'socket.io-client';
+
 import { baseApi } from '@/app/api/baseApi';
 import type {
   CreatePlaylistArgs,
   FetchPlaylistsArgs,
+  PlaylistCreatedEvent,
   PlaylistData,
   PlaylistsResponse,
   UpdatePlaylistArgs,
@@ -12,6 +15,33 @@ export const playlistsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     fetchPlaylists: build.query<PlaylistsResponse, FetchPlaylistsArgs>({
       query: (params) => ({ url: `playlists`, params }),
+      keepUnusedDataFor: 0,
+      onCacheEntryAdded: async (
+        _,
+        { cacheDataLoaded, updateCachedData, cacheEntryRemoved }
+      ) => {
+        await cacheDataLoaded;
+
+        const socket = io(import.meta.env.VITE_SOCKET_URL, {
+          path: '/api/1.0/ws',
+          transports: ['websocket'],
+        });
+
+        socket.on('tracks.playlist-created', (msg: PlaylistCreatedEvent) => {
+          const newPlaylist = msg.payload.data;
+          updateCachedData((draft) => {
+            draft.data.pop();
+            draft.data.unshift(newPlaylist);
+            draft.meta.totalCount = draft.meta.totalCount + 1;
+            draft.meta.pagesCount = Math.ceil(
+              draft.meta.pagesCount + 1 / draft.meta.pageSize
+            );
+          });
+        });
+
+        await cacheEntryRemoved;
+      },
+
       providesTags: ['Playlist'],
     }),
     createPlaylists: build.mutation<{ data: PlaylistData }, CreatePlaylistArgs>(
